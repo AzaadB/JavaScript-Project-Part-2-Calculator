@@ -5,131 +5,178 @@ let outputUpper = document.querySelector("#upper");
 // lower output is for showing the result
 let outputLower = document.querySelector("#lower");
 
-// function to get number input
-function pressNum(e) {
-  if (outputLower.innerHTML === "0") {
-    outputLower.innerHTML = e.innerHTML;
-  } else {
-    outputLower.innerHTML += e.innerHTML;
-  }
+// function to add 
+function add(num1, num2) {
+  return num1 + num2;
+}
+// function to subtract
+function subtract(num1, num2) {
+  return num1 - num2;
+}
+//function to multiply
+function multiply(num1, num2) {
+  return num1 * num2;
+}
+//function to divide
+function divide(num1, num2) {
+  return num1 / num2;
 }
 
-// clear all
-function pressAllClear() {
-  outputUpper.innerHTML = "";
-  outputLower.innerHTML = "0";
-}
-
-// clear one
-function pressClear() {
-  outputLower.innerHTML = outputLower.innerHTML.slice(0, -1);
-}
-
-// calculate button
-function pressEqual() {
-  let exp = outputLower.innerHTML;
-  outputUpper.innerHTML = exp;
-  exp = exp.replace(/×/g, "*").replace(/÷/g, "/");
-  let result;
-  try {
-    result = eval(exp);
-    // if decimal number more than 4 decimal places
-    if (result.toString().indexOf(".") !== -1) {
-      result = result.toFixed(4);
-    }
-  } catch (e) {
-    result = "Error";
-  }
-  outputLower.innerHTML = result;
-}
-
-function pressOperator(e) {
-  // check last operator
-  let lastOperator = outputLower.innerHTML.slice(-1);
-  if (
-    lastOperator === "+" ||
-    lastOperator === "-" ||
-    lastOperator === "×" ||
-    lastOperator === "÷"
-  ) {
-    output.innerHTML = outputLower.innerHTML.slice(0, -1) + e.innerHTML;
-  } else {
-    outputLower.innerHTML += e.innerHTML;
-  }
-}
-// function to get dot and bracket input(lines 61 and 65)
-function pressDot() {
-  outputLower.innerHTML += ".";
-}
-
-function pressBracket(e) {
-  outputLower.innerHTML += e.innerHTML;
-}
-
-// attach keyboard event
-document.addEventListener("keydown", function (e) {
-  switch (e.key) {
-    case "0":
-      pressNum(document.querySelector("button:nth-child(2)"));
-      break;
-    case "1":
-      pressNum(document.querySelector("button:nth-child(5)"));
-      break;
-    case "2":
-      pressNum(document.querySelector("button:nth-child(6)"));
-      break;
-    case "3":
-      pressNum(document.querySelector("button:nth-child(7)"));
-      break;
-    case "4":
-      pressNum(document.querySelector("button:nth-child(9)"));
-      break;
-    case "5":
-      pressNum(document.querySelector("button:nth-child(10)"));
-      break;
-    case "6":
-      pressNum(document.querySelector("button:nth-child(11)"));
-      break;
-    case "7":
-      pressNum(document.querySelector("button:nth-child(13)"));
-      break;
-    case "8":
-      pressNum(document.querySelector("button:nth-child(14)"));
-      break;
-    case "9":
-      pressNum(document.querySelector("button:nth-child(15)"));
-      break;
+function operate(op, num1, num2) {
+  switch (op) {
     case "+":
-      pressOperator(document.querySelector("button:nth-child(4)"));
+      return add(num1, num2);
       break;
     case "-":
-      pressOperator(document.querySelector("button:nth-child(8)"));
+      return subtract(num1, num2);
       break;
     case "*":
-      pressOperator(document.querySelector("button:nth-child(12)"));
+      return multiply(num1, num2);
       break;
     case "/":
-      pressOperator(document.querySelector("button:nth-child(16)"));
-      break;
-    case ".":
-      pressDot();
-      break;
-    case "(":
-      pressBracket(document.querySelector("button:nth-child(18)"));
-      break;
-    case ")":
-      pressBracket(document.querySelector("button:nth-child(19)"));
-      break;
-    case "Enter":
-      // prevent default action
-      e.preventDefault();
-      pressEqual();
-      break;
-    case "Backspace":
-      pressClear();
-      break;
-    case "Escape":
-      pressAllClear();
+      if (num2 === 0) {
+        buttons.forEach((button) => button.setAttribute("disabled", "true"));
+        zero.setAttribute("disabled", "true");
+        return "Math Error: Can Not Divide By Zero";
+      } else {
+        return divide(num1, num2);
+      }
       break;
   }
+}
+
+const buttons = document.querySelectorAll(".btn");
+const zero = document.querySelector("#zero");
+const clear = document.querySelector("#clear");
+
+clear.addEventListener("click", () => {
+  clearDisplay();
 });
+
+zero.addEventListener("click", (e) => {
+  populateNumber(e.target.textContent);
+});
+
+buttons.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    populateNumber(e.target.textContent);
+  });
+});
+
+//Keyboard Support
+document.addEventListener("keydown", (e) => {
+  if (e.key >= 0 && e.key <= 9) {
+    populateNumber(e.key);
+  } else if (
+    e.key === "+" ||
+    e.key === "-" ||
+    e.key === "*" ||
+    e.key === "/" ||
+    e.key === "."
+  ) {
+    populateNumber(e.key);
+  } else if (e.key === "Enter") {
+    populateNumber("=");
+  } else if (e.key === "Backspace") {
+    populateNumber("Del");
+  } else if (e.key === "Escape") {
+    clearDisplay();
+  }
+});
+
+const display = document.getElementById("displayContent");
+const displayOp = document.getElementById("displayOperator");
+let number = ""; //buffer
+let operator = null;
+let memory = [];
+function populateNumber(e) {
+  if (parseFloat(e) || e === "0") {
+    number += e;
+    display.textContent = number;
+  }
+  //Triggered when a input in not a number (either to save the number or to perform an operation)
+  if (isNaN(parseFloat(e))) {
+    if (number != "" && number !== undefined && number !== null) {
+      //Checks for floats or backspace
+      switch (e) {
+        case ".":
+          if (number.includes(".")) {
+            break;
+          } else {
+            number += e;
+            display.textContent = number;
+          }
+          break;
+        case "Del":
+          number = number.slice(0, -1);
+          if (number === "") {
+            number = 0;
+          }
+          display.textContent = number;
+          break;
+        default:
+          memory.push(number);
+      }
+    }
+    //Keeps memory in as a length of 2 by removing the first element if exceeded the limit
+    if (memory.length > 2) {
+      memory.splice(0, 1);
+    }
+    switch (e) {
+      case "=":
+        //Checks if operator is null due to a prevoius EQUALS press, and checks if memory is filled
+        if (memory.length >= 2 && operator != null) {
+          number = operate(
+            operator,
+            parseFloat(memory[0]),
+            parseFloat(memory[1])
+          );
+          display.textContent = +number.toFixed(6); //Rounds to 6 decimal places and removes trailing zeros
+          operator = null;
+          memory = [];
+          memory.push(number);
+          number = "";
+          displayOp.textContent = "";
+        } else if (operator == null) {
+          break;
+        } else {
+          number = "";
+        }
+        break;
+      case ".":
+        break;
+      case "Del":
+        break;
+      default:
+        if (memory.length >= 2) {
+          if (operator == null) {
+            //In case of trying to perfrom an operation after pressing EQUALS
+            operator = e;
+          }
+          number = operate(
+            operator,
+            parseFloat(memory[0]),
+            parseFloat(memory[1])
+          );
+          display.textContent = +number.toFixed(6);
+          memory = [];
+          memory.push(number);
+          number = "";
+        } else {
+          number = "";
+        }
+        displayOp.textContent = e;
+        operator = e;
+    }
+  }
+}
+
+function clearDisplay() {
+  number = "";
+  memory = [];
+  operator = null;
+  display.textContent = "0";
+  displayOp.textContent = "";
+  buttons.forEach((button) => button.removeAttribute("disabled"));
+  zero.removeAttribute("disabled");
+}
