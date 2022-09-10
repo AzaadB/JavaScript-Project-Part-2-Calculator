@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="calculator.css" />
+    <title>Calculator</title>
+  </head>
+
+  <body>
+    <!--First we create a container element(line 15) which is a div element witha class called container-->
+    <!--Inside the container div(line 15),
+    we create another div element which will be the calculator container(line 16)-->
+    <div class="container">
+      <div class="calculator">
+        <!--inside the calculator container(line 16), 
+        create 2 div elements one to display the result(line 19) and another to display the input(line 26).-->
+        <div class="output">
+          <!--The output element(line 19) will further contain 2 pre elements. 
+        The first one is called upper output(line 23), which displays the expression, and the 
+        second one is called lower output(line 24), which displays the result.-->
+          <pre id="upper"></pre>
+          <pre id="lower">0</pre>
+        </div>
+        <div class="input">
+          <!--The input element(line 26) will contain all kinds of input buttons we can have like,
+        numbers, operators, clear, etc. Also, attach onclick event to all these buttons 
+        with a javascript function.-->
+          <button onclick="pressAllClear()">AC</button>
+          <button onclick="pressNum(this)">0</button>
+          <button onclick="pressClear()"><i class="fas fa-backspace"></i>
+          </button>
+          <button onclick="pressOperator()">+</button>
+          <button onclick="pressNum(this)">1</button>
+          <button onclick="pressNum(this)">2</button>
+          <button onclick="pressNum(this)">3</button>
+          <button onclick="pressOperator(this)">-</button>
+          <button onclick="pressNum(this)">4</button>
+          <button onclick="pressNum(this)">5</button>
+          <button onclick="pressNum(this)">6</button>
+          <button onclick="pressOperator(this)">X</button>
+          <button onclick="pressNum(this)">7</button>
+          <button onclick="pressNum(this)">8</button>
+          <button onclick="pressNum(this)">9</button>
+          <button onclick="pressOperator(this)">/</button>
+          <button onclick="pressDot()">.</button>
+          <button onclick="pressBracket(this)">(</button>
+          <button onclick="pressBracket(this)">)</button>
+          <button onclick="pressEqual()">=</button>
+        </div>
+        <!--In the above code (lines 30-51), you can see the buttons are in a certain order because,
+        we want our buttons to be in specific places. With different orders, 
+        we can create different layouts of the calculator.-->
+      </div>
+    </div>
+    <script src="calculator.js"></script>
+  </body>
+</html>
