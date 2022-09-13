@@ -1,23 +1,17 @@
-// javascript calculator
+// javascript calculator//
 
-// upper output is for showing the expression
-let outputUpper = document.querySelector("#upper");
-// lower output is for showing the result
-let outputLower = document.querySelector("#lower");
-
-// function to add 
 function add(num1, num2) {
   return num1 + num2;
 }
-// function to subtract
+
 function subtract(num1, num2) {
   return num1 - num2;
 }
-//function to multiply
+
 function multiply(num1, num2) {
   return num1 * num2;
 }
-//function to divide
+
 function divide(num1, num2) {
   return num1 / num2;
 }
@@ -75,11 +69,11 @@ document.addEventListener("keydown", (e) => {
     e.key === "."
   ) {
     populateNumber(e.key);
-  } else if (e.key === "Enter") {
+  } else if (e.key === "e") {
     populateNumber("=");
   } else if (e.key === "Backspace") {
     populateNumber("Del");
-  } else if (e.key === "Escape") {
+  } else if (e.key === "c") {
     clearDisplay();
   }
 });
@@ -92,7 +86,7 @@ let memory = [];
 function populateNumber(e) {
   if (parseFloat(e) || e === "0") {
     number += e;
-    display.textContent = number;
+    display.textContent = +number;
   }
   //Triggered when a input in not a number (either to save the number or to perform an operation)
   if (isNaN(parseFloat(e))) {
@@ -131,7 +125,11 @@ function populateNumber(e) {
             parseFloat(memory[0]),
             parseFloat(memory[1])
           );
-          display.textContent = +number.toFixed(6); //Rounds to 6 decimal places and removes trailing zeros
+          if (typeof number === "string") {
+            display.textContent = number;
+          } else {
+            display.textContent = +number.toFixed(6); //Rounds to 6 decimal places and removes trailing zeros
+          }
           operator = null;
           memory = [];
           memory.push(number);
@@ -158,7 +156,11 @@ function populateNumber(e) {
             parseFloat(memory[0]),
             parseFloat(memory[1])
           );
-          display.textContent = +number.toFixed(6);
+          if (typeof number === "string") {
+            display.textContent = number;
+          } else {
+            display.textContent = +number.toFixed(6);
+          }
           memory = [];
           memory.push(number);
           number = "";

@@ -2,16 +2,16 @@
   font-family: "Courier New", Courier, monospace;
 }
 #container {
-  border: 2px black solid;
-  margin: 20rem 10rem;
-  background-color: #f0f0f0;
+  border: 5px black solid;
+  margin: 20px 10px;
+  background-color: rgb(44, 43, 43);
 }
 
 #display {
   border: 2px black solid;
-  margin: 1rem;
+  margin: 3px;
   padding: 0 1rem;
-  background-color: azure;
+  background-color: whitesmoke;
   display: flex;
   justify-content: space-between;
 }
@@ -37,9 +37,10 @@
 .wideBtn,
 .btn {
   font-size: 2rem;
-  background-color: #fffcfc;
+  background-color: #080606;
   border-radius: 10px;
   cursor: pointer;
+  color: white;
 }
 
 .wideBtn:hover,
